@@ -10,7 +10,7 @@ replace_placeholder_in_status_line() {
   local old_status_line=$(get_tmux_option $status_line_side)
   local new_status_line=${old_status_line/$placeholder/$script}
 
-  $(set_tmux_option $status_line_side "$new_status_line")
+  set_tmux_option $status_line_side "$new_status_line"
 }
 
 main() {

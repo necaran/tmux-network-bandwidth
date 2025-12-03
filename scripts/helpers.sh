@@ -17,7 +17,7 @@ get_tmux_option() {
 set_tmux_option() {
   local option_name="$1"
   local option_value="$2"
-  $(tmux set-option -gq $option_name "$option_value")
+  tmux set-option -gq $option_name "$option_value"
 }
 
 os_type() {
