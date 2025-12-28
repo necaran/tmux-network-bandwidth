@@ -36,7 +36,19 @@ get_bandwidth() {
 
 format_speed() {
   local padding=$(get_tmux_option "@tmux-network-bandwidth-padding" 5)
-  numfmt --to=iec --suffix "B/s" --format "%f" --padding $padding $1
+  numfmt --to=iec --suffix "B/s" --format "%f" --padding $padding $1 ||
+  awk 'BEGIN{
+    BYTE = ARGV[1]
+    X = 0
+    split("K M G T P E", UNIT)
+    while (BYTE >= 1024 && X++ < length(UNIT)-1)
+      BYTE /= 1024
+    if (BYTE <= 9.9)
+      BYTE = int(BYTE * 10 + 0.999) / 10
+    else if (BYTE > int(BYTE))
+      BYTE = int(BYTE) + 1
+    printf "%" ARGV[2] "s\n", BYTE UNIT[X] "B/s"
+  }' $1 $padding
 }
 
 main() {
